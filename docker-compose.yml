@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  igreja-api:
+    container_name: igreja-api
+    image: igreja-api:dev
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    command: sh -c "npx typeorm-ts-node-commonjs migration:run -d src/config/database.config.ts && npm run start:dev"
+    environment:
+      NODE_ENV: development
+      SERVER_PORT: ${SERVER_PORT}
+      DB_DATABASE: igreja
+    env_file: .env
+    networks:
+      - igreja-connect
+
+  igreja-postgres:
+    container_name: igreja-postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - ~/docker/volumes/IgrejaApi_Postgres:/var/lib/postgresql/data
+    env_file: .env
+    networks:
+      - igreja-connect
+    logging:
+      driver: none
+
+networks:
+
+  igreja-connect:
+    driver: bridge

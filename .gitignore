@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+
+# TypeScript
+*.tsbuildinfo
+*.d.ts
+
+# VSCode
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# outros
+pgdata/
+.env
+package-lock.json
