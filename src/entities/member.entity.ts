@@ -3,10 +3,16 @@ import { accountType, BaseEntity, ageRange, gender } from './base.entity';
 
 @Entity()
 export class Member extends BaseEntity {
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: accountType
+  })
   accountType: accountType;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: ageRange
+  })
   ageRange: ageRange;
 
   @Column({ unique: true })
@@ -15,7 +21,10 @@ export class Member extends BaseEntity {
   @Column()
   fullName: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: gender
+  })
   gender: gender;
 
   @Column({ unique: true, nullable: true })
