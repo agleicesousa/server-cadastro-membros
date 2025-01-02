@@ -19,3 +19,4 @@ logs/
 pgdata/
 .env
 package-lock.json
+ca.crt
