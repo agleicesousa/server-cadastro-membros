@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import { PostgresDataSource } from './config/database.config';
-import { User } from './entities/user.entities';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerDocument } from './config/swagger.config';
 import 'dotenv/config';
@@ -12,16 +11,6 @@ const port = process.env.SERVER_PORT
 app.use(cors());
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
-app.get('/users', async (req, res) => {
-  const userRepository = PostgresDataSource.getRepository(User);
-  const users = await userRepository.find();
-  res.json(users);
-});
 
 PostgresDataSource.initialize()
   .then(() => {
