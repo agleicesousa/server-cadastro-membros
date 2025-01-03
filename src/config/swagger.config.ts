@@ -1,40 +1,40 @@
-import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerJSDoc, { Options } from 'swagger-jsdoc';
 import 'dotenv/config';
 
-const port = process.env.SERVER_PORT
+const port = process.env.SERVER_PORT;
 
-export const swaggerDocument: swaggerJSDoc.Options = {
+export const swaggerDocument: Options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Igreja API',
+      title: 'Membros API',
       description: 'Documentação da API do projeto Cadastrar Membros',
-      version: '1.0.0'
+      version: '1.0.0',
     },
     servers: [
       {
         url: `http://localhost:${port}`,
-        description: 'Servidor Local'
-      }
+        description: 'Servidor Local',
+      },
     ],
     externalDocs: {
       description: 'Swagger JSON',
-      url: '../swagger.json'
+      url: `http://localhost:${port}/swagger.json`,
     },
     components: {
       securitySchemes: {
         BearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
+          bearerFormat: 'JWT',
+        },
+      },
     },
     security: [
       {
-        BearerAuth: []
-      }
-    ]
+        BearerAuth: [],
+      },
+    ],
   },
-  apis: ['src/routes/*.ts', 'routes/*.js']
+  apis: ['src/routes/*.ts', 'routes/*.js'],
 };
