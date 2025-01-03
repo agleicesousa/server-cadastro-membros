@@ -25,8 +25,7 @@ export enum gender {
   NOT_INFORMED = 'not informed'
 }
 
-@Entity()
-export class BaseEntity {
+export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
