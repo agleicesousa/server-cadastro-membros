@@ -5,22 +5,23 @@ import ErrorHandler from '../errors/handler.error';
 export class memberService {
   private memberRepository = PostgresDataSource.getRepository(Member);
 
-  private async startDatabase() {
+  private async startDatabase(): Promise<void> {
     if (!PostgresDataSource.isInitialized) {
       await PostgresDataSource.initialize();
     }
   }
 
-  async createMember(dataMember: Member) {
-    await this.startDatabase;
+  async createMember(dataMember: Member): Promise<Member> {
+    await this.startDatabase();
 
     const newMember = this.memberRepository.create(dataMember);
 
     try {
-        await this.memberRepository.save(newMember);
-        return newMember;
+      await this.memberRepository.save(newMember);
+      return newMember;
     } catch (error) {
-        throw ErrorHandler.internalServerError('Erro ao salvar novo membro.');
+      console.error('Erro ao salvar novo membro:', error);
+      throw ErrorHandler.internalServerError('Erro ao salvar novo membro.');
     }
   }
 }
