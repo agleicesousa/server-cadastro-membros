@@ -2,7 +2,7 @@ import { PostgresDataSource } from '../config/database.config';
 import { Member } from '../entities/member.entity';
 import ErrorHandler from '../errors/handler.error';
 
-export class memberService {
+export class MemberService {
   private memberRepository = PostgresDataSource.getRepository(Member);
 
   private async startDatabase(): Promise<void> {
@@ -22,6 +22,16 @@ export class memberService {
     } catch (error) {
       console.error('Erro ao salvar novo membro:', error);
       throw ErrorHandler.internalServerError('Erro ao salvar novo membro.');
+    }
+  }
+
+  async getMembers(): Promise<Member[]> {
+    try {
+      await this.startDatabase();
+      return this.memberRepository.find();
+    } catch (error) {
+      console.error('Erro ao listar membros:', error);
+      throw ErrorHandler.internalServerError('Erro ao listar membros.');
     }
   }
 }
