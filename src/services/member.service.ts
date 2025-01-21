@@ -34,4 +34,19 @@ export class MemberService {
       throw ErrorHandler.internalServerError('Erro ao listar membros.');
     }
   }
+
+  async findMembersBy(columnName: string, value: string): Promise<Member[]> {
+    try {
+      await this.startDatabase();
+      const members = await this.memberRepository.find({
+        where: { [columnName]: value }
+      });
+      return members;
+    } catch (error) {
+      console.error(`Erro ao buscar membro por ${columnName}:`, error);
+      throw ErrorHandler.internalServerError(
+        `Erro ao buscar membro por ${columnName}.`
+      );
+    }
+  }
 }

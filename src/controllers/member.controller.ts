@@ -35,4 +35,30 @@ export class MemberController {
       });
     }
   }
+
+  async findMembersBy(req: Request, res: Response): Promise<Response> {
+    try {
+      const { columnName, value } = req.params;
+      console.log(`Procurando membros por ${columnName} com valor ${value}`);
+      const members = await this.memberService.findMembersBy(columnName, value);
+
+      if (members.length === 0) {
+        return res.status(404).json({
+          message: 'Nenhum membro encontrado com os critérios fornecidos.',
+          data: []
+        });
+      }
+
+      return res.status(200).json({
+        message: 'Membros encontrados com sucesso',
+        data: members
+      });
+    } catch (error) {
+      console.error('Erro ao buscar membros:', error);
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+      });
+    }
+  }
 }
