@@ -65,7 +65,10 @@ export class MemberController {
     try {
       const { id } = req.params;
       const dataMember = req.body;
-      const updatedMember = await this.memberService.updateMember(Number(id), dataMember);
+      const updatedMember = await this.memberService.updateMember(
+        Number(id),
+        dataMember
+      );
       const member = await this.memberService.getMembers();
 
       if (member.length === 0) {
@@ -78,6 +81,21 @@ export class MemberController {
       return res.status(200).json({
         message: 'Membro atualizado com sucesso',
         data: updatedMember
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+      });
+    }
+  }
+
+  async deleteMember(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      await this.memberService.deleteMember(Number(id));
+      return res.status(200).json({
+        message: 'Membro deletado com sucesso'
       });
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;

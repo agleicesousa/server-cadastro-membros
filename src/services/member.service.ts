@@ -64,4 +64,18 @@ export class MemberService {
       throw ErrorHandler.internalServerError(`Erro ao atualizar membro.`);
     }
   }
+
+  async deleteMember(id: number): Promise<void> {
+    try {
+      await this.startDatabase();
+      const member = await this.memberRepository.findOneBy({ id });
+      if (!member) {
+        throw ErrorHandler.notFound(`Membro não encontrado.`);
+      }
+      await this.memberRepository.remove(member);
+    } catch (error) {
+      console.error(`Erro ao deletar membro:`, error);
+      throw ErrorHandler.internalServerError(`Erro ao deletar membro.`);
+    }
+  }
 }
