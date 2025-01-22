@@ -10,13 +10,13 @@ export class MemberController {
       const dataMember = req.body;
       const newMember = await this.memberService.createMember(dataMember);
       return res.status(201).json({
-        message: 'Membro criado com sucesso',
+        message: 'Membro criado com sucesso!',
         data: newMember
       });
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+        message: 'Houve um problema ao criar o membro. Tente novamente mais tarde.'
       });
     }
   }
@@ -25,13 +25,13 @@ export class MemberController {
     try {
       const members = await this.memberService.getMembers();
       return res.status(200).json({
-        message: 'Membros listados com sucesso',
+        message: 'Lista de membros obtida com êxito.',
         data: members
       });
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+        message: 'Não foi possível obter a lista de membros no momento. Por favor, tente mais tarde.'
       });
     }
   }
@@ -49,14 +49,14 @@ export class MemberController {
       }
 
       return res.status(200).json({
-        message: 'Membros encontrados com sucesso',
+        message: 'Membros encontrados com sucesso.',
         data: members
       });
     } catch (error) {
       console.error('Erro ao buscar membros:', error);
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+        message: 'Ocorreu um erro ao buscar os membros. Por favor, tente novamente mais tarde.'
       });
     }
   }
@@ -79,13 +79,13 @@ export class MemberController {
       }
 
       return res.status(200).json({
-        message: 'Membro atualizado com sucesso',
+        message: 'Membro atualizado com êxito.',
         data: updatedMember
       });
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+        message: 'Não foi possível atualizar o membro. Tente novamente mais tarde.'
       });
     }
   }
@@ -95,12 +95,12 @@ export class MemberController {
       const { id } = req.params;
       await this.memberService.deleteMember(Number(id));
       return res.status(200).json({
-        message: 'Membro deletado com sucesso'
+        message: 'Membro removido com sucesso.'
       });
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+        message: 'Erro ao remover o membro. Por favor, tente novamente mais tarde.'
       });
     }
   }
