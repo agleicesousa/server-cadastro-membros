@@ -20,8 +20,8 @@ export class MemberService {
       await this.memberRepository.save(newMember);
       return newMember;
     } catch (error) {
-      console.error('Erro ao salvar novo membro:', error);
-      throw ErrorHandler.internalServerError('Erro ao salvar novo membro.');
+      console.error('Erro ao salvar o novo membro:', error);
+      throw ErrorHandler.internalServerError('Não foi possível salvar o novo membro.');
     }
   }
 
@@ -30,8 +30,8 @@ export class MemberService {
       await this.startDatabase();
       return this.memberRepository.find();
     } catch (error) {
-      console.error('Erro ao listar membros:', error);
-      throw ErrorHandler.internalServerError('Erro ao listar membros.');
+      console.error('Erro ao listar os membros:', error);
+      throw ErrorHandler.internalServerError('Não foi possível listar os membros.');
     }
   }
 
@@ -43,10 +43,8 @@ export class MemberService {
       });
       return members;
     } catch (error) {
-      console.error(`Erro ao buscar membro por ${columnName}:`, error);
-      throw ErrorHandler.internalServerError(
-        `Erro ao buscar membro por ${columnName}.`
-      );
+      console.error(`Erro ao buscar membros pelo critério ${columnName}:`, error);
+      throw ErrorHandler.internalServerError(`Não foi possível buscar membros pelo critério ${columnName}.`);
     }
   }
 
@@ -55,13 +53,13 @@ export class MemberService {
       await this.startDatabase();
       const member = await this.memberRepository.findOneBy({ id });
       if (!member) {
-        throw ErrorHandler.notFound(`Membro não encontrado.`);
+        throw ErrorHandler.notFound('Membro não localizado.');
       }
       Object.assign(member, dataMember);
       return this.memberRepository.save(member);
     } catch (error) {
-      console.error(`Erro ao atualizar membro:`, error);
-      throw ErrorHandler.internalServerError(`Erro ao atualizar membro.`);
+      console.error('Erro ao atualizar o membro:', error);
+      throw ErrorHandler.internalServerError('Não foi possível atualizar o membro.');
     }
   }
 
@@ -70,12 +68,12 @@ export class MemberService {
       await this.startDatabase();
       const member = await this.memberRepository.findOneBy({ id });
       if (!member) {
-        throw ErrorHandler.notFound(`Membro não encontrado.`);
+        throw ErrorHandler.notFound('Membro não localizado.');
       }
       await this.memberRepository.remove(member);
     } catch (error) {
-      console.error(`Erro ao deletar membro:`, error);
-      throw ErrorHandler.internalServerError(`Erro ao deletar membro.`);
+      console.error('Erro ao deletar o membro:', error);
+      throw ErrorHandler.internalServerError('Não foi possível deletar o membro.');
     }
   }
 }
