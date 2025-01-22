@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --config eslint.config.mjs .",
-    "start:dev": "nodemon -r ts-node/register --exec 'npm run lint && ts-node --transpile-only ./src/app.ts'"
+    "start:dev": "nodemon -r ts-node/register --exec 'npm run lint && ts-node --transpile-only ./src/app.ts",
+    "seed": "ts-node --transpile-only ./src/seeds/database.seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
   "type": "commonjs",
   "description": "",
   "dependencies": {
+    "@faker-js/faker": "^9.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
