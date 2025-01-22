@@ -43,7 +43,7 @@ export class MemberService {
       });
       return members;
     } catch (error) {
-      console.error(`Erro ao buscar membros pelo critério ${columnName}:`, error);
+      console.error('Erro ao buscar membros pelo critério %s:', columnName, error);
       throw ErrorHandler.internalServerError(`Não foi possível buscar membros pelo critério ${columnName}.`);
     }
   }
