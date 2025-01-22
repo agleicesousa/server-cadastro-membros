@@ -39,7 +39,6 @@ export class MemberController {
   async findMembersBy(req: Request, res: Response): Promise<Response> {
     try {
       const { columnName, value } = req.params;
-      console.log(`Procurando membros por ${columnName} com valor ${value}`);
       const members = await this.memberService.findMembersBy(columnName, value);
 
       if (members.length === 0) {
@@ -55,6 +54,32 @@ export class MemberController {
       });
     } catch (error) {
       console.error('Erro ao buscar membros:', error);
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message: 'Algo deu errado. Por favor, tente novamente mais tarde.'
+      });
+    }
+  }
+
+  async updateMember(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const dataMember = req.body;
+      const updatedMember = await this.memberService.updateMember(Number(id), dataMember);
+      const member = await this.memberService.getMembers();
+
+      if (member.length === 0) {
+        return res.status(404).json({
+          message: 'Nenhum membro encontrado com os critérios fornecidos.',
+          data: []
+        });
+      }
+
+      return res.status(200).json({
+        message: 'Membro atualizado com sucesso',
+        data: updatedMember
+      });
+    } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message: 'Algo deu errado. Por favor, tente novamente mais tarde.'

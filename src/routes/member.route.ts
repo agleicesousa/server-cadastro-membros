@@ -8,5 +8,6 @@ const memberController = new MemberController();
 memberRoute.post('/', asyncHandler((req, res) => memberController.createMember(req, res)));
 memberRoute.get('/', asyncHandler((req, res) => memberController.getMembers(req, res)));
 memberRoute.get('/:columnName/:value', asyncHandler((req, res) => memberController.findMembersBy(req, res)));
+memberRoute.put('/:id', asyncHandler((req, res) => memberController.updateMember(req, res)));
 
 export default memberRoute;

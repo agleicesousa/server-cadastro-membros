@@ -49,4 +49,19 @@ export class MemberService {
       );
     }
   }
+
+  async updateMember(id: number, dataMember: Member): Promise<Member> {
+    try {
+      await this.startDatabase();
+      const member = await this.memberRepository.findOneBy({ id });
+      if (!member) {
+        throw ErrorHandler.notFound(`Membro não encontrado.`);
+      }
+      Object.assign(member, dataMember);
+      return this.memberRepository.save(member);
+    } catch (error) {
+      console.error(`Erro ao atualizar membro:`, error);
+      throw ErrorHandler.internalServerError(`Erro ao atualizar membro.`);
+    }
+  }
 }
