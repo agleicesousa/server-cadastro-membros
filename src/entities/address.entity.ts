@@ -6,8 +6,11 @@ export class Address extends BaseEntity {
   @Column()
   country: string;
   
-  @Column()
-  stateInitials: stateInitials;
+  @Column({
+    type: 'enum',
+    enum: stateInitials,
+  })
+  stateInitials: stateInitials;  
 
   @Column()
   city: string;
