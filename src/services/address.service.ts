@@ -30,7 +30,13 @@ export class AddressService {
   async getAddresses(): Promise<Address[]> {
     try {
       await this.startDatabase();
-      return this.addressRepository.find();
+      const addresses = await this.addressRepository.find();
+
+      if (addresses.length === 0) {
+        throw ErrorHandler.notFound('Nenhum endereço cadastrado.');
+      }
+
+      return addresses;
     } catch (error) {
       console.error('Erro ao listar os endereços:', error);
       throw ErrorHandler.internalServerError(
@@ -60,7 +66,7 @@ export class AddressService {
         error
       );
 
-      if (error instanceof ErrorHandler) {
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
         throw error;
       }
 
@@ -87,7 +93,7 @@ export class AddressService {
     } catch (error) {
       console.error('Erro ao atualizar o endereço:', error);
 
-      if (error instanceof ErrorHandler) {
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
         throw error;
       }
 
@@ -110,7 +116,7 @@ export class AddressService {
     } catch (error) {
       console.error('Erro ao deletar o endereço:', error);
 
-      if (error instanceof ErrorHandler) {
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
         throw error;
       }
 

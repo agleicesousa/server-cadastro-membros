@@ -33,7 +33,9 @@ export class AddressController {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
-          'Não foi possível obter a lista de endereços no momento. Por favor, tente mais tarde.'
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Não foi possível obter a lista de endereços no momento. Por favor, tente mais tarde.'
       });
     }
   }
