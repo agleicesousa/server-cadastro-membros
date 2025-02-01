@@ -64,4 +64,24 @@ export class AddressService {
       );
     }
   }
+
+  async updateAddress(id: number, dataAddress: Address): Promise<Address> {
+    await this.startDatabase();
+    const address = await this.addressRepository.findOneBy({ id });
+
+    if (!address) {
+      throw ErrorHandler.notFound('Endereço não encontrado.');
+    }
+
+    Object.assign(address, dataAddress);
+    try {
+      await this.addressRepository.save(address);
+      return address;
+    } catch (error) {
+      console.error('Erro ao atualizar o endereço:', error);
+      throw ErrorHandler.internalServerError(
+        'Não foi possível atualizar o endereço.'
+      );
+    }
+  }
 }

@@ -59,4 +59,25 @@ export class AddressController {
       });
     }
   }
+
+  async updateAddress(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const dataAddress = req.body;
+      const updatedAddress = await this.addressService.updateAddress(
+        Number(id),
+        dataAddress
+      );
+      return res.status(200).json({
+        message: 'Endereço atualizado com êxito.',
+        data: updatedAddress
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          'Houve um problema ao atualizar o endereço. Tente novamente mais tarde.'
+      });
+    }
+  }
 }

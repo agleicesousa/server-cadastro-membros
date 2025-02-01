@@ -20,4 +20,9 @@ addressRoute.get(
   asyncHandler((req, res) => addressController.findAddressesBy(req, res))
 );
 
+addressRoute.put(
+  '/:id',
+  asyncHandler((req, res) => addressController.updateAddress(req, res))
+);
+
 export default addressRoute;
