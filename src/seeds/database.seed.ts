@@ -69,7 +69,7 @@ async function seedDatabase() {
     const fakeMembers = generateFakeUsers(10).map((member) => {
       const randomAddress = faker.helpers.arrayElement(savedAddresses);
       if (!randomAddress) {
-        console.error('Erro: Endereço não encontrado para o membro', member);
+        console.error('Erro: Endereço não encontrado para o membro');
       }
       return {
         ...member,
