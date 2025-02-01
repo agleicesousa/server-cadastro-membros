@@ -73,8 +73,7 @@ export class AddressController {
         data: updatedAddress
       });
     } catch (error) {
-      const statusCode =
-        error instanceof ErrorHandler ? error.statusCode : 500;
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
           error instanceof ErrorHandler
@@ -92,7 +91,6 @@ export class AddressController {
       return res.status(200).json({
         message: 'Endereço removido com sucesso.'
       });
-
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({

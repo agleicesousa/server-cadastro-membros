@@ -59,25 +59,38 @@ export class AddressService {
         columnName,
         error
       );
+
+      if (error instanceof ErrorHandler) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
         `Não foi possível buscar endereços pelo critério ${columnName}.`
       );
     }
   }
 
-  async updateAddress(id: number, dataAddress: Partial<Address>): Promise<Address> {
-    await this.startDatabase();
-    const address = await this.addressRepository.findOneBy({ id });
-
-    if (!address) {
-      throw ErrorHandler.notFound('Endereço não encontrado.');
-    }
-
-    Object.assign(address, dataAddress);
+  async updateAddress(
+    id: number,
+    dataAddress: Partial<Address>
+  ): Promise<Address> {
     try {
-      return this.addressRepository.save(address);
+      await this.startDatabase();
+      const address = await this.addressRepository.findOneBy({ id });
+
+      if (!address) {
+        throw ErrorHandler.notFound('Endereço não encontrado.');
+      }
+
+      Object.assign(address, dataAddress);
+      return await this.addressRepository.save(address);
     } catch (error) {
       console.error('Erro ao atualizar o endereço:', error);
+
+      if (error instanceof ErrorHandler) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
         'Não foi possível atualizar o endereço.'
       );
@@ -85,20 +98,24 @@ export class AddressService {
   }
 
   async deleteAddress(id: number): Promise<void> {
-    await this.startDatabase();
-    const address = await this.addressRepository.findOneBy({ id });
-
-    if (!address) {
-      throw ErrorHandler.notFound('Endereço não encontrado.');
-    }
-
     try {
-      await this.addressRepository.remove(address);
+      await this.startDatabase();
+      const address = await this.addressRepository.findOneBy({ id });
 
+      if (!address) {
+        throw ErrorHandler.notFound('Endereço não encontrado.');
+      }
+
+      await this.addressRepository.remove(address);
     } catch (error) {
       console.error('Erro ao deletar o endereço:', error);
+
+      if (error instanceof ErrorHandler) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
-        ' Não foi possível deletar o endereço.'
+        'Não foi possível deletar o endereço.'
       );
     }
   }
