@@ -21,4 +21,20 @@ export class AddressController {
       });
     }
   }
+
+  async getAddresses(_req: Request, res: Response): Promise<Response> {
+    try {
+      const addresses = await this.addressService.getAddresses();
+      return res.status(200).json({
+        message: 'Lista de endereços obtida com êxito.',
+        data: addresses
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          'Não foi possível obter a lista de endereços no momento. Por favor, tente mais tarde.'
+      });
+    }
+  }
 }

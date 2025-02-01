@@ -26,4 +26,16 @@ export class AddressService {
       );
     }
   }
+
+  async getAddresses(): Promise<Address[]> {
+    try {
+      await this.startDatabase();
+      return this.addressRepository.find();
+    } catch (error) {
+      console.error('Erro ao listar os endereços:', error);
+      throw ErrorHandler.internalServerError(
+        'Não foi possível listar os endereços.'
+      );
+    }
+  }
 }

@@ -6,5 +6,6 @@ const addressRoute = Router();
 const addressController = new AddressController();
 
 addressRoute.post('/', asyncHandler((req, res) => addressController.createAddress(req, res)));
+addressRoute.get('/', asyncHandler((req, res) => addressController.getAddresses(req, res)));
 
 export default addressRoute;
