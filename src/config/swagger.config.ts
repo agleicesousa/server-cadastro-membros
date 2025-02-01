@@ -9,32 +9,32 @@ export const swaggerDocument: Options = {
     info: {
       title: 'Membros API',
       description: 'Documentação da API do projeto Cadastrar Membros',
-      version: '1.0.0',
+      version: '1.0.0'
     },
     servers: [
       {
         url: `http://localhost:${port}`,
-        description: 'Servidor Local',
-      },
+        description: 'Servidor Local'
+      }
     ],
     externalDocs: {
       description: 'Swagger JSON',
-      url: `http://localhost:${port}/swagger.json`,
+      url: `http://localhost:${port}/swagger.json`
     },
     components: {
       securitySchemes: {
         BearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
+          bearerFormat: 'JWT'
+        }
+      }
     },
     security: [
       {
-        BearerAuth: [],
-      },
-    ],
+        BearerAuth: []
+      }
+    ]
   },
-  apis: ['src/routes/*.ts', 'routes/*.js'],
+  apis: ['src/routes/*.ts', 'routes/*.js']
 };

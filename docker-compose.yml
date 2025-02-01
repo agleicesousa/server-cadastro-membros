@@ -39,6 +39,5 @@ services:
       driver: none
 
 networks:
-
   igreja-connect:
     driver: bridge
