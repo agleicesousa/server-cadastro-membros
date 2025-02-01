@@ -33,7 +33,9 @@ export class MemberController {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
-          'Não foi possível obter a lista de membros no momento. Por favor, tente mais tarde.'
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Não foi possível obter a lista de membros no momento. Por favor, tente mais tarde.'
       });
     }
   }
@@ -43,23 +45,19 @@ export class MemberController {
       const { columnName, value } = req.params;
       const members = await this.memberService.findMembersBy(columnName, value);
 
-      if (members.length === 0) {
-        return res.status(404).json({
-          message: 'Nenhum membro encontrado com os critérios fornecidos.',
-          data: []
-        });
-      }
-
       return res.status(200).json({
         message: 'Membros encontrados com sucesso.',
         data: members
       });
     } catch (error) {
       console.error('Erro ao buscar membros:', error);
+
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
-          'Ocorreu um erro ao buscar os membros. Por favor, tente novamente mais tarde.'
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Ocorreu um erro ao buscar os membros. Por favor, tente novamente mais tarde.'
       });
     }
   }
@@ -72,15 +70,6 @@ export class MemberController {
         Number(id),
         dataMember
       );
-      const member = await this.memberService.getMembers();
-
-      if (member.length === 0) {
-        return res.status(404).json({
-          message: 'Nenhum membro encontrado com os critérios fornecidos.',
-          data: []
-        });
-      }
-
       return res.status(200).json({
         message: 'Membro atualizado com êxito.',
         data: updatedMember
@@ -89,7 +78,9 @@ export class MemberController {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
-          'Não foi possível atualizar o membro. Tente novamente mais tarde.'
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Não foi possível atualizar o membro. Tente novamente mais tarde.'
       });
     }
   }
@@ -103,9 +94,13 @@ export class MemberController {
       });
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      const message =
+        error instanceof ErrorHandler && error.statusCode === 404
+          ? error.message
+          : 'Erro ao remover o membro. Por favor, tente novamente mais tarde.';
+
       return res.status(statusCode).json({
-        message:
-          'Erro ao remover o membro. Por favor, tente novamente mais tarde.'
+        message: message
       });
     }
   }
