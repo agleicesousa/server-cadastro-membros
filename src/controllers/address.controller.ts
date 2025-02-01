@@ -97,7 +97,9 @@ export class AddressController {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
-          'Erro ao remover o endereço. Por favor, tente novamente mais tarde.'
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Erro ao remover o endereço. Por favor, tente novamente mais tarde.'
       });
     }
   }
