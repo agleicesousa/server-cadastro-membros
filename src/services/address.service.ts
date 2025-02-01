@@ -38,4 +38,23 @@ export class AddressService {
       );
     }
   }
+
+  async findAddressesBy(columnName: string, value: string): Promise<Address[]> {
+    try {
+      await this.startDatabase();
+      const addresses = await this.addressRepository.find({
+        where: { [columnName]: value }
+      });
+      return addresses;
+    } catch (error) {
+      console.error(
+        'Erro ao buscar endereços pelo critério %s:',
+        columnName,
+        error
+      );
+      throw ErrorHandler.internalServerError(
+        `Não foi possível buscar endereços pelo critério ${columnName}.`
+      );
+    }
+  }
 }

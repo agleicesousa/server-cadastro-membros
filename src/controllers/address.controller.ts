@@ -37,4 +37,24 @@ export class AddressController {
       });
     }
   }
+
+  async findAddressesBy(req: Request, res: Response): Promise<Response> {
+    try {
+      const { columnName, value } = req.params;
+      const addresses = await this.addressService.findAddressesBy(
+        columnName,
+        value
+      );
+      return res.status(200).json({
+        message: 'Endereços encontrados com sucesso.',
+        data: addresses
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          'Ocorreu um erro ao buscar os endereços. Por favor, tente novamente mais tarde.'
+      });
+    }
+  }
 }
