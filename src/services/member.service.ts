@@ -45,6 +45,13 @@ export class MemberService {
       const members = await this.memberRepository.find({
         where: { [columnName]: value }
       });
+
+      if (members.length === 0) {
+        throw ErrorHandler.notFound(
+          'Nenhum membro encontrado com os critérios fornecidos.'
+        );
+      }
+
       return members;
     } catch (error) {
       console.error(
