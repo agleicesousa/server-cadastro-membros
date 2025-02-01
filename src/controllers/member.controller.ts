@@ -16,7 +16,8 @@ export class MemberController {
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Houve um problema ao criar o membro. Tente novamente mais tarde.'
+        message:
+          'Houve um problema ao criar o membro. Tente novamente mais tarde.'
       });
     }
   }
@@ -31,7 +32,8 @@ export class MemberController {
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Não foi possível obter a lista de membros no momento. Por favor, tente mais tarde.'
+        message:
+          'Não foi possível obter a lista de membros no momento. Por favor, tente mais tarde.'
       });
     }
   }
@@ -56,7 +58,8 @@ export class MemberController {
       console.error('Erro ao buscar membros:', error);
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Ocorreu um erro ao buscar os membros. Por favor, tente novamente mais tarde.'
+        message:
+          'Ocorreu um erro ao buscar os membros. Por favor, tente novamente mais tarde.'
       });
     }
   }
@@ -85,7 +88,8 @@ export class MemberController {
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Não foi possível atualizar o membro. Tente novamente mais tarde.'
+        message:
+          'Não foi possível atualizar o membro. Tente novamente mais tarde.'
       });
     }
   }
@@ -100,7 +104,8 @@ export class MemberController {
     } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
-        message: 'Erro ao remover o membro. Por favor, tente novamente mais tarde.'
+        message:
+          'Erro ao remover o membro. Por favor, tente novamente mais tarde.'
       });
     }
   }

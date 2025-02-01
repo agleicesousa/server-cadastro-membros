@@ -1,6 +1,12 @@
 import { PostgresDataSource } from '../config/database.config';
 import { Member } from '../entities/member.entity';
-import { accountType, ageRange, gender } from '../entities/base.entity';
+import { Address } from '../entities/address.entity';
+import {
+  accountType,
+  ageRange,
+  gender,
+  stateInitials
+} from '../entities/base.entity';
 import { faker } from '@faker-js/faker';
 
 async function initializeDatabase() {
@@ -10,7 +16,7 @@ async function initializeDatabase() {
   }
 }
 
-function generateFakeUsers(count, defaults = {}) {
+function generateFakeUsers(count: number, defaults = {}) {
   return Array.from({ length: count }).map(() => ({
     accountType: faker.helpers.arrayElement(Object.values(accountType)),
     ageRange: faker.helpers.arrayElement(Object.values(ageRange)),
@@ -22,23 +28,21 @@ function generateFakeUsers(count, defaults = {}) {
     email: faker.internet.email(),
     phone: `+55 (${faker.string.numeric(2)}) ${faker.string.numeric(5)}-${faker.string.numeric(4)}`,
     password: faker.string.alphanumeric(10),
-    ...defaults,
+    ...defaults
   }));
 }
 
-async function hasExistingAdmins(memberRepository) {
-  const existingAdmins = await memberRepository.find({
-    where: { accountType: accountType.ADMIN },
-  });
-  return existingAdmins.length > 1;
-}
-
-async function getAdminIDs(memberRepository) {
-  const admins = await memberRepository.find({
-    where: { accountType: accountType.ADMIN },
-    select: ['id'],
-  });
-  return admins.map((admin) => admin.id);
+function generateFakeAddresses(count: number) {
+  return Array.from({ length: count }).map(() => ({
+    country: 'Brazil',
+    stateInitials: faker.helpers.arrayElement(Object.values(stateInitials)),
+    city: faker.location.city(),
+    neighborhood: faker.location.streetAddress(),
+    street: faker.location.street(),
+    number: parseInt(faker.string.numeric(3)),
+    complement: faker.lorem.words(2),
+    cep: faker.string.numeric(8)
+  }));
 }
 
 async function seedDatabase() {
@@ -46,32 +50,38 @@ async function seedDatabase() {
     await initializeDatabase();
 
     const memberRepository = PostgresDataSource.getRepository(Member);
+    const addressRepository = PostgresDataSource.getRepository(Address);
 
-    if (await hasExistingAdmins(memberRepository)) {
-      console.log('Admins já existem no banco de dados. Seed ignorado.');
-    } else {
-      console.log('Criando administradores fakes...');
-      const fakeAdmins = generateFakeUsers(5, { accountType: accountType.ADMIN });
-      const newAdmins = memberRepository.create(fakeAdmins);
-      await memberRepository.save(newAdmins);
-      console.log('Administradores fakes criados com sucesso!');
+    // Criar endereços
+    console.log('Criando endereços fakes...');
+    const fakeAddresses = generateFakeAddresses(10);
+    const newAddresses = addressRepository.create(fakeAddresses);
+    const savedAddresses = await addressRepository.save(newAddresses);
+    console.log('Endereços fakes criados com sucesso!');
+
+    // Verificar se os endereços foram salvos corretamente
+    if (!savedAddresses || savedAddresses.length === 0) {
+      throw new Error('Nenhum endereço foi salvo no banco de dados.');
     }
 
-    const adminIDs = await getAdminIDs(memberRepository);
-    if (adminIDs.length === 0) {
-      console.log('Nenhum administrador disponível. Membros não serão criados.');
-      return;
-    }
-
-    console.log('Criando membros fakes...');
-    const fakeMembers = generateFakeUsers(10, {
-      adminCreatorID: faker.helpers.arrayElement(adminIDs),
+    // Criar membros e associar endereços
+    console.log('Criando membros fakes com endereços...');
+    const fakeMembers = generateFakeUsers(10).map((member) => {
+      const randomAddress = faker.helpers.arrayElement(savedAddresses);
+      if (!randomAddress) {
+        console.error('Erro: Endereço não encontrado para o membro');
+      }
+      return {
+        ...member,
+        address: randomAddress
+      };
     });
+
     const newMembers = memberRepository.create(fakeMembers);
     await memberRepository.save(newMembers);
-    console.log('Membros fakes criados com sucesso!');
+    console.log('Membros fakes com endereços criados com sucesso!');
   } catch (error) {
-    console.error('Erro ao criar usuários fakes:', error);
+    console.error('Erro ao criar membros e endereços fakes:', error);
   }
 }
 

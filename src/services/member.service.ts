@@ -21,7 +21,9 @@ export class MemberService {
       return newMember;
     } catch (error) {
       console.error('Erro ao salvar o novo membro:', error);
-      throw ErrorHandler.internalServerError('Não foi possível salvar o novo membro.');
+      throw ErrorHandler.internalServerError(
+        'Não foi possível salvar o novo membro.'
+      );
     }
   }
 
@@ -31,7 +33,9 @@ export class MemberService {
       return this.memberRepository.find();
     } catch (error) {
       console.error('Erro ao listar os membros:', error);
-      throw ErrorHandler.internalServerError('Não foi possível listar os membros.');
+      throw ErrorHandler.internalServerError(
+        'Não foi possível listar os membros.'
+      );
     }
   }
 
@@ -41,10 +45,23 @@ export class MemberService {
       const members = await this.memberRepository.find({
         where: { [columnName]: value }
       });
+
+      if (members.length === 0) {
+        throw ErrorHandler.notFound(
+          'Nenhum membro encontrado com os critérios fornecidos.'
+        );
+      }
+
       return members;
     } catch (error) {
-      console.error('Erro ao buscar membros pelo critério %s:', columnName, error);
-      throw ErrorHandler.internalServerError(`Não foi possível buscar membros pelo critério ${columnName}.`);
+      console.error(
+        'Erro ao buscar membros pelo critério %s:',
+        columnName,
+        error
+      );
+      throw ErrorHandler.internalServerError(
+        `Não foi possível buscar membros pelo critério ${columnName}.`
+      );
     }
   }
 
@@ -59,7 +76,9 @@ export class MemberService {
       return this.memberRepository.save(member);
     } catch (error) {
       console.error('Erro ao atualizar o membro:', error);
-      throw ErrorHandler.internalServerError('Não foi possível atualizar o membro.');
+      throw ErrorHandler.internalServerError(
+        'Não foi possível atualizar o membro.'
+      );
     }
   }
 
@@ -73,7 +92,9 @@ export class MemberService {
       await this.memberRepository.remove(member);
     } catch (error) {
       console.error('Erro ao deletar o membro:', error);
-      throw ErrorHandler.internalServerError('Não foi possível deletar o membro.');
+      throw ErrorHandler.internalServerError(
+        'Não foi possível deletar o membro.'
+      );
     }
   }
 }

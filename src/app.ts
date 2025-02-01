@@ -5,7 +5,9 @@ import swaggerUI from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { swaggerDocument } from './config/swagger.config';
 import 'dotenv/config';
+
 import memberRoute from './routes/member.route';
+import addressRoute from './routes/address.route';
 
 const app = express();
 const port = process.env.SERVER_PORT;
@@ -14,6 +16,7 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 
 app.use('/members', memberRoute);
+app.use('/address', addressRoute);
 
 const initializeDatabase = async () => {
   try {
