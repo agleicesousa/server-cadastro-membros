@@ -30,7 +30,13 @@ export class MemberService {
   async getMembers(): Promise<Member[]> {
     try {
       await this.startDatabase();
-      return this.memberRepository.find();
+      const members = await this.memberRepository.find();
+
+      if (members.length === 0) {
+        throw ErrorHandler.notFound('Nenhum membro encontrado.');
+      }
+
+      return members;
     } catch (error) {
       console.error('Erro ao listar os membros:', error);
       throw ErrorHandler.internalServerError(
@@ -59,6 +65,11 @@ export class MemberService {
         columnName,
         error
       );
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
         `Não foi possível buscar membros pelo critério ${columnName}.`
       );
@@ -76,6 +87,11 @@ export class MemberService {
       return this.memberRepository.save(member);
     } catch (error) {
       console.error('Erro ao atualizar o membro:', error);
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
         'Não foi possível atualizar o membro.'
       );
@@ -92,6 +108,11 @@ export class MemberService {
       await this.memberRepository.remove(member);
     } catch (error) {
       console.error('Erro ao deletar o membro:', error);
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
         'Não foi possível deletar o membro.'
       );
