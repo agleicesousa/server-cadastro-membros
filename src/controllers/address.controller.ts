@@ -53,7 +53,9 @@ export class AddressController {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
-          'Ocorreu um erro ao buscar os endereços. Por favor, tente novamente mais tarde.'
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Ocorreu um erro ao buscar os endereços. Por favor, tente novamente mais tarde.'
       });
     }
   }

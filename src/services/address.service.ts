@@ -45,6 +45,13 @@ export class AddressService {
       const addresses = await this.addressRepository.find({
         where: { [columnName]: value }
       });
+
+      if (addresses.length === 0) {
+        throw ErrorHandler.notFound(
+          `Nenhum endereço encontrado com o critério ${columnName} = ${value}.`
+        );
+      }
+
       return addresses;
     } catch (error) {
       console.error(
