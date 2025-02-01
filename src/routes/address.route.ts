@@ -25,4 +25,9 @@ addressRoute.put(
   asyncHandler((req, res) => addressController.updateAddress(req, res))
 );
 
+addressRoute.delete(
+  '/:id',
+  asyncHandler((req, res) => addressController.deleteAddress(req, res))
+);
+
 export default addressRoute;

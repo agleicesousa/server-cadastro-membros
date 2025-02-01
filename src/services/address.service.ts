@@ -65,7 +65,7 @@ export class AddressService {
     }
   }
 
-  async updateAddress(id: number, dataAddress: Address): Promise<Address> {
+  async updateAddress(id: number, dataAddress: Partial<Address>): Promise<Address> {
     await this.startDatabase();
     const address = await this.addressRepository.findOneBy({ id });
 
@@ -75,12 +75,30 @@ export class AddressService {
 
     Object.assign(address, dataAddress);
     try {
-      await this.addressRepository.save(address);
-      return address;
+      return this.addressRepository.save(address);
     } catch (error) {
       console.error('Erro ao atualizar o endereço:', error);
       throw ErrorHandler.internalServerError(
         'Não foi possível atualizar o endereço.'
+      );
+    }
+  }
+
+  async deleteAddress(id: number): Promise<void> {
+    await this.startDatabase();
+    const address = await this.addressRepository.findOneBy({ id });
+
+    if (!address) {
+      throw ErrorHandler.notFound('Endereço não encontrado.');
+    }
+
+    try {
+      await this.addressRepository.remove(address);
+
+    } catch (error) {
+      console.error('Erro ao deletar o endereço:', error);
+      throw ErrorHandler.internalServerError(
+        ' Não foi possível deletar o endereço.'
       );
     }
   }

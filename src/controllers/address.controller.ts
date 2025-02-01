@@ -73,10 +73,31 @@ export class AddressController {
         data: updatedAddress
       });
     } catch (error) {
+      const statusCode =
+        error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Houve um problema ao atualizar o endereço. Tente novamente mais tarde.'
+      });
+    }
+  }
+
+  async deleteAddress(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      await this.addressService.deleteAddress(Number(id));
+
+      return res.status(200).json({
+        message: 'Endereço removido com sucesso.'
+      });
+
+    } catch (error) {
       const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
       return res.status(statusCode).json({
         message:
-          'Houve um problema ao atualizar o endereço. Tente novamente mais tarde.'
+          'Erro ao remover o endereço. Por favor, tente novamente mais tarde.'
       });
     }
   }
