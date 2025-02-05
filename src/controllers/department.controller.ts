@@ -85,4 +85,22 @@ export class DepartmentController {
       });
     }
   }
+
+  async deleteDepartment(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      await this.departmentService.deleteDepartment(Number(id));
+      return res.status(200).json({
+        message: 'Departamento removido com sucesso.'
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Erro ao remover o departamento. Por favor, tente novamente mais tarde.'
+      });
+    }
+  }
 }

@@ -110,4 +110,27 @@ export class DepartmentService {
       );
     }
   }
+
+  async deleteDepartment(id: number): Promise<void> {
+    try {
+      await this.startDatabase();
+      const department = await this.departmentRepository.findOneBy({ id });
+
+      if (!department) {
+        throw ErrorHandler.notFound('Departamento não localizado.');
+      }
+
+      await this.departmentRepository.remove(department);
+    } catch (error) {
+      console.error('Erro ao deletar o departamento:', error);
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
+      throw ErrorHandler.internalServerError(
+        'Não foi possível deletar o departamento.'
+      );
+    }
+  }
 }

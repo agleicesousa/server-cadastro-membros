@@ -25,4 +25,9 @@ departmentRoute.put(
   asyncHandler((req, res) => departmentController.updateDepartment(req, res))
 );
 
+departmentRoute.delete(
+  '/:id',
+  asyncHandler((req, res) => departmentController.deleteDepartment(req, res))
+);
+
 export default departmentRoute;
