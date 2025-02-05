@@ -8,6 +8,7 @@ import 'dotenv/config';
 
 import memberRoute from './routes/member.route';
 import addressRoute from './routes/address.route';
+import departmentRoute from 'routes/department.route';
 
 const app = express();
 const port = process.env.SERVER_PORT;
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use('/members', memberRoute);
 app.use('/address', addressRoute);
+app.use('/department', departmentRoute);
 
 const initializeDatabase = async () => {
   try {
