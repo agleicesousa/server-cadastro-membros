@@ -1,6 +1,7 @@
 import { PostgresDataSource } from '../config/database.config';
 import { Member } from '../entities/member.entity';
 import { Address } from '../entities/address.entity';
+import { Department } from '../entities/department.entity';
 import {
   accountType,
   ageRange,
@@ -45,12 +46,19 @@ function generateFakeAddresses(count: number) {
   }));
 }
 
+function generateFakeDepartments(count: number) {
+  return Array.from({ length: count }).map(() => ({
+    name: faker.company.name()
+  }));
+}
+
 async function seedDatabase() {
   try {
     await initializeDatabase();
 
     const memberRepository = PostgresDataSource.getRepository(Member);
     const addressRepository = PostgresDataSource.getRepository(Address);
+    const departmentRepository = PostgresDataSource.getRepository(Department);
 
     // Criar endereços
     console.log('Criando endereços fakes...');
@@ -58,30 +66,48 @@ async function seedDatabase() {
     const newAddresses = addressRepository.create(fakeAddresses);
     const savedAddresses = await addressRepository.save(newAddresses);
     console.log('Endereços fakes criados com sucesso!');
-
-    // Verificar se os endereços foram salvos corretamente
     if (!savedAddresses || savedAddresses.length === 0) {
       throw new Error('Nenhum endereço foi salvo no banco de dados.');
     }
 
-    // Criar membros e associar endereços
-    console.log('Criando membros fakes com endereços...');
+    // Criar departamentos fakes
+    console.log('Criando departamentos fakes...');
+    const fakeDepartments = generateFakeDepartments(5);
+    const newDepartments = departmentRepository.create(fakeDepartments);
+    const savedDepartments = await departmentRepository.save(newDepartments);
+    console.log('Departamentos fakes criados com sucesso!');
+    if (!savedDepartments || savedDepartments.length === 0) {
+      throw new Error('Nenhum departamento foi salvo no banco de dados.');
+    }
+
+    // Criar membros e associar endereços e departamentos
+    console.log('Criando membros fakes com endereços e departamentos...');
     const fakeMembers = generateFakeUsers(10).map((member) => {
       const randomAddress = faker.helpers.arrayElement(savedAddresses);
+      const randomDepartments = faker.helpers
+        .shuffle(savedDepartments)
+        .slice(0, 2);
       if (!randomAddress) {
         console.error('Erro: Endereço não encontrado para o membro');
       }
       return {
         ...member,
-        address: randomAddress
+        address: randomAddress,
+        departments: randomDepartments
       };
     });
 
     const newMembers = memberRepository.create(fakeMembers);
     await memberRepository.save(newMembers);
-    console.log('Membros fakes com endereços criados com sucesso!');
+
+    console.log(
+      'Membros fakes com endereços e departamentos criados com sucesso!'
+    );
   } catch (error) {
-    console.error('Erro ao criar membros e endereços fakes:', error);
+    console.error(
+      'Erro ao criar membros, endereços e departamentos fakes:',
+      error
+    );
   }
 }
 

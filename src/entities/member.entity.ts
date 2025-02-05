@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { accountType, BaseEntity, ageRange, gender } from './base.entity';
 import { Address } from './address.entity';
 import { Department } from './department.entity';
@@ -47,6 +47,7 @@ export class Member extends BaseEntity {
   @ManyToOne(() => Address, (address) => address.members, { nullable: true })
   address: Address;
 
-  @OneToMany(() => Department, (department) => department.members)
+  @ManyToMany(() => Department, (department) => department.members)
+  @JoinTable()
   departments: Department[];
 }
