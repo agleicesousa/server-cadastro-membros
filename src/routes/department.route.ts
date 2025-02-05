@@ -15,4 +15,9 @@ departmentRoute.get(
   asyncHandler((req, res) => departmentController.getDepartments(req, res))
 );
 
+departmentRoute.get(
+  '/:columnName/:value',
+  asyncHandler((req, res) => departmentController.findDepartmentsBy(req, res))
+);
+
 export default departmentRoute;

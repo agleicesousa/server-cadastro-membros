@@ -40,4 +40,26 @@ export class DepartmentController {
       });
     }
   }
+
+  async findDepartmentsBy(req: Request, res: Response): Promise<Response> {
+    try {
+      const { columnName, value } = req.params;
+      const departments = await this.departmentService.findDepartmentsBy(
+        columnName,
+        value
+      );
+      return res.status(200).json({
+        message: 'Departamentos encontrados com sucesso.',
+        data: departments
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Ocorreu um erro ao buscar os departamentos. Por favor, tente novamente mais tarde,'
+      });
+    }
+  }
 }

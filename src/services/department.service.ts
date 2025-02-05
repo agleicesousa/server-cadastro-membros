@@ -40,12 +40,46 @@ export class DepartmentService {
     } catch (error) {
       console.error('Erro ao listar os departamentos:', error);
 
-        if (error instanceof ErrorHandler && error.statusCode === 404) {
-          throw error;
-        }
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
 
       throw ErrorHandler.internalServerError(
         'Não foi possível listar os departamentos.'
+      );
+    }
+  }
+
+  async findDepartmentsBy(
+    columnName: string,
+    value: string
+  ): Promise<Department[]> {
+    try {
+      await this.startDatabase();
+      const departments = await this.departmentRepository.find({
+        where: { [columnName]: value }
+      });
+
+      if (departments.length === 0) {
+        throw ErrorHandler.notFound(
+          `Nenhum departamento encontrado com o critério ${columnName} = ${value}.`
+        );
+      }
+
+      return departments;
+    } catch (error) {
+      console.error(
+        'Erro ao buscar departamentos pelo critério %s:',
+        columnName,
+        error
+      );
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
+      throw ErrorHandler.internalServerError(
+        `Não foi possível buscar endereços pelo critério ${columnName}.`
       );
     }
   }
