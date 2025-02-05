@@ -20,4 +20,9 @@ departmentRoute.get(
   asyncHandler((req, res) => departmentController.findDepartmentsBy(req, res))
 );
 
+departmentRoute.put(
+  '/:id',
+  asyncHandler((req, res) => departmentController.updateDepartment(req, res))
+);
+
 export default departmentRoute;

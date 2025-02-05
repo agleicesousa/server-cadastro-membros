@@ -83,4 +83,31 @@ export class DepartmentService {
       );
     }
   }
+
+  async updateDepartment(
+    id: number,
+    dataDepartment: Partial<Department>
+  ): Promise<Department> {
+    try {
+      await this.startDatabase();
+      const department = await this.departmentRepository.findOneBy({ id });
+
+      if (!department) {
+        throw ErrorHandler.notFound('Departamento não encontrado.');
+      }
+
+      Object.assign(department, dataDepartment);
+      return await this.departmentRepository.save(department);
+    } catch (error) {
+      console.error('Erro ao atualizar o departamento:', error);
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
+      throw ErrorHandler.internalServerError(
+        'Não foi possivel atualizar o departamento.'
+      );
+    }
+  }
 }

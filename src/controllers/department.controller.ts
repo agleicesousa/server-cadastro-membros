@@ -62,4 +62,27 @@ export class DepartmentController {
       });
     }
   }
+
+  async updateDepartment(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const dataDepartment = req.body;
+      const updatedDepartment = await this.departmentService.updateDepartment(
+        Number(id),
+        dataDepartment
+      );
+      return res.status(200).json({
+        message: 'Departamento atualizado com êxito.',
+        data: updatedDepartment
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Houve um problema ao atualizar o departamento. Tente novamente mais tarde.'
+      });
+    }
+  }
 }
