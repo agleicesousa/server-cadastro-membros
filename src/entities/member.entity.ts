@@ -1,6 +1,7 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { accountType, BaseEntity, ageRange, gender } from './base.entity';
 import { Address } from './address.entity';
+import { Department } from './department.entity';
 
 @Entity()
 export class Member extends BaseEntity {
@@ -43,9 +44,9 @@ export class Member extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({ nullable: true })
-  adminCreatorID: number;
-
   @ManyToOne(() => Address, (address) => address.members, { nullable: true })
   address: Address;
+
+  @OneToMany(() => Department, (department) => department.members)
+  departments: Department[];
 }
