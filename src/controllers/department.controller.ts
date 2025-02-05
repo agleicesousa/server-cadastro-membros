@@ -22,4 +22,22 @@ export class DepartmentController {
       });
     }
   }
+
+  async getDepartments(_req: Request, res: Response): Promise<Response> {
+    try {
+      const departments = await this.departmentService.getDepartments();
+      return res.status(200).json({
+        message: 'Lista de departamentos obtida com êxito.',
+        data: departments
+      });
+    } catch (error) {
+      const statusCode = error instanceof ErrorHandler ? error.statusCode : 500;
+      return res.status(statusCode).json({
+        message:
+          error instanceof ErrorHandler
+            ? error.message
+            : 'Nao foi possivel obter a lista de departamentos. Por favor, tente mais tarde.'
+      });
+    }
+  }
 }

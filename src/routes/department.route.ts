@@ -10,4 +10,9 @@ departmentRoute.post(
   asyncHandler((req, res) => departmentController.createDepartment(req, res))
 );
 
+departmentRoute.get(
+  '/',
+  asyncHandler((req, res) => departmentController.getDepartments(req, res))
+);
+
 export default departmentRoute;

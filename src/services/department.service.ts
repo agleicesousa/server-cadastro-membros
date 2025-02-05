@@ -26,4 +26,22 @@ export class DepartmentService {
       );
     }
   }
+
+  async getDepartments(): Promise<Department[]> {
+    try {
+      await this.startDatabase();
+      const departments = await this.departmentRepository.find();
+
+      if (departments.length === 0) {
+        throw ErrorHandler.notFound('Nenhum departamento cadastrado.');
+      }
+
+      return departments;
+    } catch (error) {
+      console.error('Erro ao listar os departamentos:', error);
+      throw ErrorHandler.internalServerError(
+        'Não foi possível listar os departamentos.'
+      );
+    }
+  }
 }

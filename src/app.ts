@@ -8,7 +8,7 @@ import 'dotenv/config';
 
 import memberRoute from './routes/member.route';
 import addressRoute from './routes/address.route';
-import departmentRoute from 'routes/department.route';
+import departmentRoute from './routes/department.route';
 
 const app = express();
 const port = process.env.SERVER_PORT;
