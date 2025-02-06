@@ -39,6 +39,11 @@ export class MemberService {
       return members;
     } catch (error) {
       console.error('Erro ao listar os membros:', error);
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
         'Não foi possível listar os membros.'
       );

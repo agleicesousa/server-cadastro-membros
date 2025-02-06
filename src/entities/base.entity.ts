@@ -1,9 +1,4 @@
-import {
-  PrimaryGeneratedColumn,
-  Column,
-  BeforeInsert,
-  BeforeUpdate
-} from 'typeorm';
+import { PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum accountType {
   ADMIN = 'admin',
@@ -61,16 +56,10 @@ export abstract class BaseEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP'
+  })
   updatedAt: Date;
-
-  @BeforeInsert()
-  updateTimestamp() {
-    this.updatedAt = new Date();
-  }
-
-  @BeforeUpdate()
-  setDataAtualizacao(): void {
-    this.createdAt = new Date();
-  }
 }

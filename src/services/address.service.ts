@@ -39,6 +39,11 @@ export class AddressService {
       return addresses;
     } catch (error) {
       console.error('Erro ao listar os endereços:', error);
+
+      if (error instanceof ErrorHandler && error.statusCode === 404) {
+        throw error;
+      }
+
       throw ErrorHandler.internalServerError(
         'Não foi possível listar os endereços.'
       );

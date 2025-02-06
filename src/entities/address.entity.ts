@@ -25,7 +25,7 @@ export class Address extends BaseEntity {
   @Column()
   number: number;
 
-  @Column()
+  @Column({ nullable: true })
   complement: string;
 
   @Column()
